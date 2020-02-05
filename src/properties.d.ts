@@ -6,7 +6,7 @@ declare module "properties" {
   ): undefined | object;
   function stringify(
     obj: object,
-    options?: { path: string },
+    options?: { path?: string, unicode?: boolean },
     callback?: Function
   ): undefined | string;
 }

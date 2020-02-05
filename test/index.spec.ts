@@ -16,6 +16,10 @@ describe("public API", () => {
       done()
     })
   })
+  it("escape multibyte chars", async () => {
+    const result = await stringify({ face: "😁" })
+    expect(result).to.include("face = \\ud83d\\ude01")
+  })
   it("generates .properties file", (done) => {
     file().then(fileResult => {
       write({
