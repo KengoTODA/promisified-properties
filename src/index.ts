@@ -23,7 +23,7 @@ export async function parse(data: string): Promise<object> {
   })
 }
 export async function stringify(data: object): Promise<string> {
-  const result = props.stringify(data) as string
+  const result = props.stringify(data, { unicode: true }) as string
   return Promise.resolve(result)
 }
 export async function write(data: object, path: string): Promise<undefined> {
