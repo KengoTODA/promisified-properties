@@ -1,0 +1,79 @@
+{
+  "name": "promisified-properties",
+  "version": "0.0.0-development",
+  "description": "Handle .properties file via promisified and typed API",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "prepack": "tsc",
+    "semantic-release": "semantic-release",
+    "test": "TS_NODE_FILES=true nyc mocha"
+  },
+  "files": [
+    "README.md",
+    "LICENSE",
+    "lib"
+  ],
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/KengoTODA/promisified-properties.git"
+  },
+  "keywords": [
+    "properties",
+    "parser"
+  ],
+  "author": "Kengo TODA",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KengoTODA/promisified-properties/issues"
+  },
+  "homepage": "https://github.com/KengoTODA/promisified-properties#readme",
+  "dependencies": {
+    "properties": "^1.2.1"
+  },
+  "engines": {
+    "node": ">=12.14",
+    "npm": ">=6.13"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.8",
+    "@types/mocha": "^7.0.1",
+    "chai": "^4.2.0",
+    "husky": "^4.2.1",
+    "mocha": "^7.0.1",
+    "nyc": "^15.0.0",
+    "prettier": "^1.19.1",
+    "semantic-release": "^17.0.2",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "mocha": {
+    "extension": "ts",
+    "require": [
+      "ts-node/register",
+      "source-map-support/register"
+    ]
+  },
+  "nyc": {
+    "extension": [
+      ".ts"
+    ],
+    "include": "src",
+    "exclude": [
+      "**/*.d.ts"
+    ],
+    "reporter": [
+      "html"
+    ],
+    "all": true
+  }
+}
