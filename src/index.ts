@@ -11,13 +11,16 @@ export async function parseFile(path: string): Promise<object> {
     })
   })
 }
-export async function parse(data: string): Promise<object> {
+function objToMap<V>(obj: { [key: string]: string }): Map<string, string> {
+    return new Map(Object.entries(obj));
+}
+export async function parse(data: string): Promise<Map<string,string>> {
   return new Promise((resolve, reject) => {
-    props.parse(data, { path: false }, (err: Error, result: object) => {
+    props.parse(data, { path: false }, (err: Error, result: { [key: string]: string }) => {
       if (err) {
         reject(err)
       } else {
-        resolve(result)
+        resolve(objToMap(result))
       }
     })
   })
