@@ -2,7 +2,7 @@ import "mocha"
 import { expect } from "chai"
 import { promises } from "fs"
 import { file } from "tmp-promise";
-import { stringify, write } from "../src/index"
+import { parse, stringify, write } from "../src/index"
 
 describe("public API", () => {
   it("provides methods returning Promise instance", () => {
@@ -15,6 +15,10 @@ describe("public API", () => {
       expect(result).to.include("baz = 42")
       done()
     })
+  })
+  it("parses escaped multibyte chars", async () => {
+    const result = await parse("face = \\ud83d\\ude01")
+    expect(result.get('face')).to.equal("😁")
   })
   it("escape multibyte chars", async () => {
     const result = await stringify({ face: "😁" })
