@@ -6,13 +6,13 @@ import * as props from "properties"
  * @param path - Path to the target file to parse
  * @returns Promise which returns parsed properties
  */
-export async function parseFile(path: string): Promise<object> {
+export async function parseFile(path: string): Promise<Map<string, string>> {
   return new Promise((resolve, reject) => {
-    props.parse(path, { path: true }, (err: Error, result: object) => {
+    props.parse(path, { path: true }, (err: Error, result: { [key: string]: string }) => {
       if (err) {
         reject(err)
       } else {
-        resolve(result)
+        resolve(objToMap(result))
       }
     })
   })
