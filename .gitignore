@@ -1,5 +1,5 @@
 .env
-
+docs
 lib/*.ts
 lib/*.js
 
