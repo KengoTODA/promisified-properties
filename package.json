@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
+    "docs": "typedoc src",
     "prepack": "tsc",
     "semantic-release": "semantic-release",
     "test": "TS_NODE_FILES=true nyc mocha"
@@ -47,6 +48,7 @@
     "semantic-release": "^17.0.2",
     "tmp-promise": "^2.0.2",
     "ts-node": "^8.6.2",
+    "typedoc": "^0.16.9",
     "typescript": "^3.7.5"
   },
   "publishConfig": {
