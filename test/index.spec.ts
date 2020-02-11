@@ -88,6 +88,7 @@ describe("public API", () => {
       return stringify({ foo: "bar", baz: 42 }).then(result => {
         expect(result).to.include("foo = bar")
         expect(result).to.include("baz = 42")
+        expect(result).to.equal("foo = bar\nbaz = 42\n")
       })
     })
     it("escapes multibyte chars", async () => {
