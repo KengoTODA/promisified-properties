@@ -1,4 +1,6 @@
 import * as props from "properties"
+import { promises } from "fs"
+import { escape, escapeKey } from "./escape"
 
 /**
  * Parse the file pointed by the given path as [the Properties defined by Java](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Properties.html).
@@ -45,8 +47,14 @@ export async function parse(data: string): Promise<Map<string, string>> {
  * @param data - Properties data to convert into text format
  * @returns Converted text which represents the given properties
  */
-export async function stringify(data: object): Promise<string> {
-  const result = props.stringify(data, { unicode: true }) as string
+export function stringify<T extends object, K extends keyof T>(data: T): Promise<string> {
+  let result = ''
+  for (const key in data) {
+    if (data.hasOwnProperty(key)) {
+      const element = data[key];
+      result += escape(escapeKey(key)) + ' = ' + escape('' + element) + '\n'
+    }
+  }
   return Promise.resolve(result)
 }
 /**
@@ -56,14 +64,8 @@ export async function stringify(data: object): Promise<string> {
  * @param path - Path to the target file to write
  * @returns Promise which is resolved when file is successfully written
  */
-export async function write(data: object, path: string): Promise<undefined> {
-  return new Promise((resolve, reject) => {
-    props.stringify(data, { path }, (err: Error) => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve()
-      }
-    })
-  })
+export function write(data: object, path: string): Promise<void> {
+  return stringify(data).then(s => promises.writeFile(path, s, {
+    encoding: 'utf8'
+  }))
 }
