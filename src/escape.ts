@@ -1,4 +1,9 @@
-
+/**
+ * Escape the given string, based on the spec [defined by Java](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Properties.html).
+ * 
+ * @param s - string to escape
+ * @returns Escaped string
+ */
 export function escape(s: string): string {
     if (s.length == 0) {
         return ''
@@ -30,6 +35,12 @@ export function escape(s: string): string {
     return result
 }
 
+/**
+ * Escape the given string as property key, based on the spec [defined by Java](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Properties.html).
+ * 
+ * @param s - string to escape
+ * @returns Escaped string
+ */
 export function escapeKey(key: string): string {
     return key.replace(/:/g, '\\:').replace(/=/g, "\\=")
 }

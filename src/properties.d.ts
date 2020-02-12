@@ -4,9 +4,4 @@ declare module "properties" {
     options: { path: boolean },
     callback: Function
   ): undefined | object;
-  function stringify(
-    obj: object,
-    options?: { path?: string, unicode?: boolean },
-    callback?: Function
-  ): undefined | string;
 }
