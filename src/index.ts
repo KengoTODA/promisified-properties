@@ -1,6 +1,6 @@
-import * as props from "properties"
 import { promises } from "fs"
 import { escape, escapeKey } from "./escape"
+import { parse as parseProperties } from "./parser"
 
 /**
  * Parse the file pointed by the given path as [the Properties defined by Java](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Properties.html).
@@ -9,19 +9,9 @@ import { escape, escapeKey } from "./escape"
  * @returns Promise which returns parsed properties
  */
 export async function parseFile(path: string): Promise<Map<string, string>> {
-  return new Promise((resolve, reject) => {
-    props.parse(path, { path: true }, (err: Error, result: { [key: string]: string }) => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(objToMap(result))
-      }
-    })
+  return promises.readFile(path, { encoding: 'utf8'}).then(s => {
+    return parseProperties(s)
   })
-}
-
-function objToMap<V>(obj: { [key: string]: string }): Map<string, string> {
-    return new Map(Object.entries(obj));
 }
 
 /**
@@ -32,13 +22,8 @@ function objToMap<V>(obj: { [key: string]: string }): Map<string, string> {
  */
 export async function parse(data: string): Promise<Map<string, string>> {
   return new Promise((resolve, reject) => {
-    props.parse(data, { path: false }, (err: Error, result: { [key: string]: string }) => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(objToMap(result))
-      }
-    })
+    const result = parseProperties(data)
+    resolve(result)
   })
 }
 

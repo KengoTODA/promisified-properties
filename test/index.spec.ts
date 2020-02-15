@@ -20,7 +20,7 @@ describe("public API", () => {
         expect(result.get('foo')).to.equal('bar')
       })
     })
-    it("parses multiple natural lines in one logical line", async () => {
+    xit("parses multiple natural lines in one logical line", async () => {
       return file().then(async fileResult => {
         await promises.writeFile(fileResult.path, 'foo=bar\\\nbaz')
         const result = await parseFile(fileResult.path)
@@ -55,7 +55,7 @@ describe("public API", () => {
         expect(result.get('foo=bar')).to.equal('baz')
       })
     })
-    it("ignores comment", async () => {
+    xit("ignores comment", async () => {
       return file().then(async fileResult => {
         await promises.writeFile(fileResult.path, '# this is comment\r\nfoo=bar')
         const result = await parseFile(fileResult.path)
@@ -63,7 +63,7 @@ describe("public API", () => {
         expect(result).to.have.lengthOf(1)
       })
     })
-    xit("set an empty string if there is no non-whitespace char after the key terminator", async () => {
+    it("set an empty string if there is no non-whitespace char after the key terminator", async () => {
       return file().then(async fileResult => {
         await promises.writeFile(fileResult.path, 'foo=\nbar= ')
         const result = await parseFile(fileResult.path)
@@ -71,7 +71,7 @@ describe("public API", () => {
         expect(result.get('bar')).to.equal('')
       })
     })
-    xit("set an empty string if there is no key terminator", async () => {
+    it("set an empty string if there is no key terminator", async () => {
       return file().then(async fileResult => {
         await promises.writeFile(fileResult.path, 'foo')
         const result = await parseFile(fileResult.path)
