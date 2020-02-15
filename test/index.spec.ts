@@ -83,36 +83,31 @@ describe("public API", () => {
     });
   });
   describe("#stringify", () => {
-    it("provides methods returning Promise instance", () => {
-      const result = stringify({ foo: "bar" });
-      expect(result).to.be.an.instanceOf(Promise);
+    it("stringify properties", () => {
+      const result = stringify({ foo: "bar", baz: 42 });
+      expect(result).to.include("foo = bar");
+      expect(result).to.include("baz = 42");
+      expect(result).to.equal("foo = bar\nbaz = 42\n");
     });
-    it("stringify properties", async () => {
-      return stringify({ foo: "bar", baz: 42 }).then(result => {
-        expect(result).to.include("foo = bar");
-        expect(result).to.include("baz = 42");
-        expect(result).to.equal("foo = bar\nbaz = 42\n");
-      });
-    });
-    it("escapes multibyte chars", async () => {
-      const result = await stringify({ face: "😁" });
+    it("escapes multibyte chars", () => {
+      const result = stringify({ face: "😁" });
       expect(result).to.include("face = \\ud83d\\ude01");
     });
-    it("escapes CR", async () => {
-      const result = await stringify({ text: "foo\rbar" });
+    it("escapes CR", () => {
+      const result = stringify({ text: "foo\rbar" });
       expect(result).to.include("text = foo\\rbar");
     });
-    it("escapes LF", async () => {
-      const result = await stringify({ text: "foo\nbar" });
+    it("escapes LF", () => {
+      const result = stringify({ text: "foo\nbar" });
       expect(result).to.include("text = foo\\nbar");
     });
-    it("escapes = in key", async () => {
-      const result = await stringify({ "foo=bar": "baz" });
+    it("escapes = in key", () => {
+      const result = stringify({ "foo=bar": "baz" });
       expect(result).to.include("foo\\=bar = baz");
     });
   });
-  it("parses escaped multibyte chars", async () => {
-    const result = await parse("face = \\ud83d\\ude01");
+  it("parses escaped multibyte chars", () => {
+    const result = parse("face = \\ud83d\\ude01");
     expect(result.get("face")).to.equal("😁");
   });
   it("generates .properties file", done => {
