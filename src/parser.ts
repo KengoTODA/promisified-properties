@@ -67,7 +67,8 @@ export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
     return p1
       .or(p2)
       .or(p3)
-      .or(r.CommentLine.map(_ => {}));
+      .or(r.CommentLine.map(_ => {}))
+      .or(r.BrankLine.map(_ => {}));
   },
   /**
    * Key terminator defined in the spec
@@ -76,15 +77,12 @@ export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
     return Parsimmon.oneOf(":=");
   },
   Key: (r: Parsimmon.Language) => {
-    return Parsimmon.regexp(
-      /([a-zA-Z_.-]|\\\\|\\r|\\n|\\=|\\:|\\u[a-z0-9]{4})+/
-    )
+    return Parsimmon.regexp(/([a-zA-Z_.-]|\\u[a-z0-9]{4}|\\[\\a-zA-Z=:])+/)
       .trim(r.WhiteSpace)
       .map(interpretEscapes);
   },
   Value: (r: Parsimmon.Language) => {
-    return Parsimmon.regexp(/([a-zA-Z_.-]|\\\\|\\r|\\n|\\f|\\u[a-z0-9]{4})+/)
-      .or(r.KeyTerminator)
+    return Parsimmon.regexp(/([a-zA-Z_.-]|\\u[a-z0-9]{4}|\\[\\a-zA-Z=:])+/)
       .trim(r.WhiteSpace)
       .map(interpretEscapes);
   },
@@ -92,6 +90,8 @@ export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
     return r.LogicalLine.sepBy(Parsimmon.newline).map(lines => {
       const map = new Map<string, string>();
       lines.forEach((line: Entry) => {
+        if (!line) return;
+
         if (line.value) {
           map.set(line.key, line.value.trim());
         } else {
