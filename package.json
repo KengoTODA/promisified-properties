@@ -31,8 +31,7 @@
   },
   "homepage": "https://github.com/KengoTODA/promisified-properties#readme",
   "dependencies": {
-    "parsimmon": "^1.13.0",
-    "properties": "^1.2.1"
+    "parsimmon": "^1.13.0"
   },
   "engines": {
     "node": ">=12.14",
