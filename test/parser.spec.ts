@@ -63,6 +63,22 @@ describe("Key", () => {
     const parsed = PropertiesParser.Key.tryParse("\\ud83d\\ude01");
     expect(parsed).to.equal("😁");
   });
+  it("ignores needless \\", () => {
+    const parsed = PropertiesParser.Key.tryParse("\\b\\z");
+    expect(parsed).to.equal("bz");
+  });
+  it("supports dot-separated key", () => {
+    const parsed = PropertiesParser.Key.tryParse("a.b.c");
+    expect(parsed).to.equal("a.b.c");
+  });
+  it("supports dash-separated key", () => {
+    const parsed = PropertiesParser.Key.tryParse("a-b-c");
+    expect(parsed).to.equal("a-b-c");
+  });
+  it("supports underscore-separated key", () => {
+    const parsed = PropertiesParser.Key.tryParse("a_b_c");
+    expect(parsed).to.equal("a_b_c");
+  });
 });
 
 describe("#parse", () => {
@@ -70,6 +86,14 @@ describe("#parse", () => {
     const parsed: Map<string, string> = parse("foo = bar ");
     expect(parsed).to.have.lengthOf(1);
     expect(parsed.get("foo")).to.equal("bar");
+  });
+  it("parses property with brank line", () => {
+    const parsed: Map<string, string> = parse("\f\t");
+    expect(parsed).to.be.empty;
+  });
+  it("parses property with needless escape", () => {
+    const parsed: Map<string, string> = parse("\\b=\\z");
+    expect(parsed.get("b")).to.equal("z");
   });
   it("parses property without value", () => {
     const parsed: Map<string, string> = parse("foo = ");
