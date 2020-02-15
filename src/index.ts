@@ -20,11 +20,8 @@ export async function parseFile(path: string): Promise<Map<string, string>> {
  * @param data - Text to parse
  * @returns Promise which returns parsed properties
  */
-export async function parse(data: string): Promise<Map<string, string>> {
-  return new Promise((resolve, reject) => {
-    const result = parseProperties(data);
-    resolve(result);
-  });
+export function parse(data: string): Map<string, string> {
+  return parseProperties(data);
 }
 
 /**
@@ -34,7 +31,7 @@ export async function parse(data: string): Promise<Map<string, string>> {
  */
 export function stringify<T extends object, K extends keyof T>(
   data: T
-): Promise<string> {
+): string {
   let result = "";
   for (const key in data) {
     if (data.hasOwnProperty(key)) {
@@ -42,7 +39,7 @@ export function stringify<T extends object, K extends keyof T>(
       result += escape(escapeKey(key)) + " = " + escape("" + element) + "\n";
     }
   }
-  return Promise.resolve(result);
+  return result;
 }
 /**
  * Convert properties data to text, based on [the spec defined by Java](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Properties.html),
@@ -52,9 +49,7 @@ export function stringify<T extends object, K extends keyof T>(
  * @returns Promise which is resolved when file is successfully written
  */
 export function write(data: object, path: string): Promise<void> {
-  return stringify(data).then(s =>
-    promises.writeFile(path, s, {
-      encoding: "utf8"
-    })
-  );
+  return promises.writeFile(path, stringify(data), {
+    encoding: "utf8"
+  });
 }
