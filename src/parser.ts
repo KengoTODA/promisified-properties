@@ -21,9 +21,9 @@ function interpretEscapes(str: string): string {
   });
 }
 type Entry = {
-  key: string
-  value?: string
-}
+  key: string;
+  value?: string;
+};
 export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
   /**
    * WhiteSpace defined in the spec
@@ -32,39 +32,42 @@ export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
     return Parsimmon.regexp(/( |\f|\t|\\u0009|\\u0020|\\u000C)*/);
   },
   NaturalLine: (r: Parsimmon.Language) => {
-    return r.CommentLine.or(r.BrankLine).or(Parsimmon.regexp(/.*/))
+    return r.CommentLine.or(r.BrankLine).or(Parsimmon.regexp(/.*/));
   },
   /**
    * The natural line that contains only white space characters.
    * Ignored by parser.
    */
   BrankLine: (r: Parsimmon.Language) => {
-    return Parsimmon.regexp(/^( |\f|\t|\\u0009|\\u0020|\\u000C)*$/)
+    return Parsimmon.regexp(/^( |\f|\t|\\u0009|\\u0020|\\u000C)*$/);
   },
   /**
    * The natural line that has an ASCII '#' or '!' as its first non-white space character.
    * Ignored by parser.
    */
   CommentLine: (r: Parsimmon.Language) => {
-    return Parsimmon.regexp(/^[!#].*$/).trim(r.WhiteSpace)
+    return Parsimmon.regexp(/^[!#].*$/).trim(r.WhiteSpace);
   },
   LogicalLine: (r: Parsimmon.Language) => {
     // TODO The line terminator (\r, \n, \r\n) can be escaped by \
     const p1: Parsimmon.Parser<Entry> = Parsimmon.seqObj(
-      ['key', r.Key.trim(r.WhiteSpace)],
+      ["key", r.Key.trim(r.WhiteSpace)],
       r.KeyTerminator,
-      ['value', r.Value.trim(r.WhiteSpace)]
-    )
+      ["value", r.Value.trim(r.WhiteSpace)]
+    );
     const p2: Parsimmon.Parser<Entry> = Parsimmon.seqObj(
-      ['key', r.Key.trim(r.WhiteSpace)],
+      ["key", r.Key.trim(r.WhiteSpace)],
       r.KeyTerminator,
       r.WhiteSpace
-    )
+    );
     const p3: Parsimmon.Parser<Entry> = Parsimmon.seqObj(
-      ['key', r.Key.trim(r.WhiteSpace)],
+      ["key", r.Key.trim(r.WhiteSpace)],
       r.WhiteSpace
-    )
-    return p1.or(p2).or(p3).or(r.CommentLine.map(_ => {}))
+    );
+    return p1
+      .or(p2)
+      .or(p3)
+      .or(r.CommentLine.map(_ => {}));
   },
   /**
    * Key terminator defined in the spec
@@ -86,14 +89,13 @@ export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
       .map(interpretEscapes);
   },
   Properties: (r: Parsimmon.Language) => {
-    return r.LogicalLine.sepBy(Parsimmon.newline)
-      .map(lines => {
+    return r.LogicalLine.sepBy(Parsimmon.newline).map(lines => {
       const map = new Map<string, string>();
       lines.forEach((line: Entry) => {
         if (line.value) {
           map.set(line.key, line.value.trim());
         } else {
-          map.set(line.key, '')
+          map.set(line.key, "");
         }
       });
       return map;
