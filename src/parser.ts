@@ -1,5 +1,16 @@
 import Parsimmon from "parsimmon";
 
+/**
+ * Append a line-break to the end of line, if the end of line is not escaped by '\'
+ */
+function appendLineBreak(line: string): string {
+  if (/(^|[^\\])(\\\\)*\\$/.test(line)) {
+    return line.substring(0, line.length - 1);
+  } else {
+    return line + "\n";
+  }
+}
+
 function interpretEscapes(str: string): string {
   return str.replace(/\\(u[0-9a-fA-F]{4}|[^u])/g, (_: any, escape: string) => {
     const type = escape.charAt(0);
@@ -32,7 +43,10 @@ export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
     return Parsimmon.regexp(/( |\f|\t|\\u0009|\\u0020|\\u000C)*/);
   },
   NaturalLine: (r: Parsimmon.Language) => {
-    return r.CommentLine.or(r.BrankLine).or(Parsimmon.regexp(/.*/));
+    return r.CommentLine.map(_ => "")
+      .or(r.BrankLine)
+      .map(_ => "")
+      .or(Parsimmon.regexp(/.*/));
   },
   /**
    * The natural line that contains only white space characters.
@@ -46,10 +60,9 @@ export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
    * Ignored by parser.
    */
   CommentLine: (r: Parsimmon.Language) => {
-    return Parsimmon.regexp(/^[!#].*$/).trim(r.WhiteSpace);
+    return Parsimmon.regexp(/^[!#].*/).trim(r.WhiteSpace);
   },
   LogicalLine: (r: Parsimmon.Language) => {
-    // TODO The line terminator (\r, \n, \r\n) can be escaped by \
     const p1: Parsimmon.Parser<Entry> = Parsimmon.seqObj(
       ["key", r.Key.trim(r.WhiteSpace)],
       r.KeyTerminator,
@@ -64,11 +77,7 @@ export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
       ["key", r.Key.trim(r.WhiteSpace)],
       r.WhiteSpace
     );
-    return p1
-      .or(p2)
-      .or(p3)
-      .or(r.CommentLine.map(_ => {}))
-      .or(r.BrankLine.map(_ => {}));
+    return p1.or(p2).or(p3);
   },
   /**
    * Key terminator defined in the spec
@@ -85,24 +94,31 @@ export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
     return Parsimmon.regexp(/([a-zA-Z_.-]|\\u[a-z0-9]{4}|\\[\\a-zA-Z=:])+/)
       .trim(r.WhiteSpace)
       .map(interpretEscapes);
-  },
-  Properties: (r: Parsimmon.Language) => {
-    return r.LogicalLine.sepBy(Parsimmon.newline).map(lines => {
-      const map = new Map<string, string>();
-      lines.forEach((line: Entry) => {
-        if (!line) return;
-
-        if (line.value) {
-          map.set(line.key, line.value.trim());
-        } else {
-          map.set(line.key, "");
-        }
-      });
-      return map;
-    });
   }
 });
 
 export function parse(s: string): Map<string, string> {
-  return PropertiesParser.Properties.tryParse(s);
+  const logicalLines: string[] = PropertiesParser.NaturalLine.sepBy(
+    Parsimmon.newline
+  )
+    .map(naturalLines => {
+      return naturalLines
+        .map(appendLineBreak)
+        .join("")
+        .split("\n")
+        .filter(s => s.length > 0);
+    })
+    .tryParse(s);
+  const map: Map<string, string> = new Map<string, string>();
+  logicalLines.forEach(line => {
+    const entry = PropertiesParser.LogicalLine.tryParse(line);
+    if (!entry) return;
+
+    if (entry.value) {
+      map.set(entry.key, entry.value.trim());
+    } else {
+      map.set(entry.key, "");
+    }
+  });
+  return map;
 }

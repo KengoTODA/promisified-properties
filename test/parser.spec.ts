@@ -105,7 +105,7 @@ describe("#parse", () => {
     expect(parsed).to.have.lengthOf(1);
     expect(parsed.get("foo")).to.equal("");
   });
-  xit("parses property with comment", () => {
+  it("parses property with comment", () => {
     const parsed: Map<string, string> = parse("# comment\nfoo = bar ");
     expect(parsed).to.have.lengthOf(1);
     expect(parsed.get("foo")).to.equal("bar");
