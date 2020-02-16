@@ -86,12 +86,12 @@ export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
     return Parsimmon.oneOf(":=");
   },
   Key: (r: Parsimmon.Language) => {
-    return Parsimmon.regexp(/([a-zA-Z_.-]|\\u[a-z0-9]{4}|\\[\\a-zA-Z=:])+/)
+    return Parsimmon.regexp(/([a-zA-Z0-9_.-]|\\u[a-z0-9]{4}|\\[\\a-zA-Z0-9=:])+/)
       .trim(r.WhiteSpace)
       .map(interpretEscapes);
   },
   Value: (r: Parsimmon.Language) => {
-    return Parsimmon.regexp(/([a-zA-Z_.-]|\\u[a-z0-9]{4}|\\[\\a-zA-Z=:])+/)
+    return Parsimmon.regexp(/([a-zA-Z0-9_.-]|\\u[a-z0-9]{4}|\\[\\a-zA-Z0-9=:])+/)
       .trim(r.WhiteSpace)
       .map(interpretEscapes);
   }
