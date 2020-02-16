@@ -84,25 +84,30 @@ describe("public API", () => {
   });
   describe("#stringify", () => {
     it("stringify properties", () => {
-      const result = stringify({ foo: "bar", baz: 42 });
+      const result = stringify(
+        new Map([
+          ["foo", "bar"],
+          ["baz", "42"]
+        ])
+      );
       expect(result).to.include("foo = bar");
       expect(result).to.include("baz = 42");
       expect(result).to.equal("foo = bar\nbaz = 42\n");
     });
     it("escapes multibyte chars", () => {
-      const result = stringify({ face: "😁" });
+      const result = stringify(new Map([["face", "😁"]]));
       expect(result).to.include("face = \\ud83d\\ude01");
     });
     it("escapes CR", () => {
-      const result = stringify({ text: "foo\rbar" });
+      const result = stringify(new Map([["text", "foo\rbar"]]));
       expect(result).to.include("text = foo\\rbar");
     });
     it("escapes LF", () => {
-      const result = stringify({ text: "foo\nbar" });
+      const result = stringify(new Map([["text", "foo\nbar"]]));
       expect(result).to.include("text = foo\\nbar");
     });
     it("escapes = in key", () => {
-      const result = stringify({ "foo=bar": "baz" });
+      const result = stringify(new Map([["foo=bar", "baz"]]));
       expect(result).to.include("foo\\=bar = baz");
     });
   });
@@ -114,10 +119,10 @@ describe("public API", () => {
     file()
       .then(fileResult => {
         write(
-          {
-            foo: "bar",
-            baz: 42
-          },
+          new Map([
+            ["foo", "bar"],
+            ["baz", "42"]
+          ]),
           fileResult.path
         )
           .then(() => {

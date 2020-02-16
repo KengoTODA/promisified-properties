@@ -38,11 +38,11 @@ describe("Value", () => {
   it("supports version format", () => {
     const parsed = PropertiesParser.Value.tryParse("0.12.3");
     expect(parsed).to.equal("0.12.3");
-  })
+  });
   it("supports SNAPSHOT version format", () => {
     const parsed = PropertiesParser.Value.tryParse("0.12.3-SNAPSHOT");
     expect(parsed).to.equal("0.12.3-SNAPSHOT");
-  })
+  });
   it("ignores needless \\", () => {
     const parsed = PropertiesParser.Value.tryParse("\\b\\z\\1");
     expect(parsed).to.equal("bz1");
@@ -96,11 +96,11 @@ describe("Key", () => {
   it("supports version format", () => {
     const parsed = PropertiesParser.Key.tryParse("0.12.3");
     expect(parsed).to.equal("0.12.3");
-  })
+  });
   it("supports SNAPSHOT version format", () => {
     const parsed = PropertiesParser.Key.tryParse("0.12.3-SNAPSHOT");
     expect(parsed).to.equal("0.12.3-SNAPSHOT");
-  })
+  });
 });
 
 describe("#parse", () => {
