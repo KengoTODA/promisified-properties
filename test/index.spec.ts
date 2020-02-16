@@ -20,7 +20,7 @@ describe("public API", () => {
         expect(result.get("foo")).to.equal("bar");
       });
     });
-    xit("parses multiple natural lines in one logical line", async () => {
+    it("parses multiple natural lines in one logical line", async () => {
       return file().then(async fileResult => {
         await promises.writeFile(fileResult.path, "foo=bar\\\nbaz");
         const result = await parseFile(fileResult.path);
@@ -55,7 +55,7 @@ describe("public API", () => {
         expect(result.get("foo=bar")).to.equal("baz");
       });
     });
-    xit("ignores comment", async () => {
+    it("ignores comment", async () => {
       return file().then(async fileResult => {
         await promises.writeFile(
           fileResult.path,
