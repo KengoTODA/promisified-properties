@@ -34,6 +34,20 @@ describe("CommentLine", () => {
     expect(parsed).to.equal("# foo ");
   });
 });
+describe("Value", () => {
+  it("supports version format", () => {
+    const parsed = PropertiesParser.Value.tryParse("0.12.3");
+    expect(parsed).to.equal("0.12.3");
+  })
+  it("supports SNAPSHOT version format", () => {
+    const parsed = PropertiesParser.Value.tryParse("0.12.3-SNAPSHOT");
+    expect(parsed).to.equal("0.12.3-SNAPSHOT");
+  })
+  it("ignores needless \\", () => {
+    const parsed = PropertiesParser.Value.tryParse("\\b\\z\\1");
+    expect(parsed).to.equal("bz1");
+  });
+});
 describe("Key", () => {
   it("parses a simple key", () => {
     const parsed = PropertiesParser.Key.tryParse("foo");
@@ -64,8 +78,8 @@ describe("Key", () => {
     expect(parsed).to.equal("😁");
   });
   it("ignores needless \\", () => {
-    const parsed = PropertiesParser.Key.tryParse("\\b\\z");
-    expect(parsed).to.equal("bz");
+    const parsed = PropertiesParser.Key.tryParse("\\b\\z\\1");
+    expect(parsed).to.equal("bz1");
   });
   it("supports dot-separated key", () => {
     const parsed = PropertiesParser.Key.tryParse("a.b.c");
@@ -79,6 +93,14 @@ describe("Key", () => {
     const parsed = PropertiesParser.Key.tryParse("a_b_c");
     expect(parsed).to.equal("a_b_c");
   });
+  it("supports version format", () => {
+    const parsed = PropertiesParser.Key.tryParse("0.12.3");
+    expect(parsed).to.equal("0.12.3");
+  })
+  it("supports SNAPSHOT version format", () => {
+    const parsed = PropertiesParser.Key.tryParse("0.12.3-SNAPSHOT");
+    expect(parsed).to.equal("0.12.3-SNAPSHOT");
+  })
 });
 
 describe("#parse", () => {
