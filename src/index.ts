@@ -29,16 +29,11 @@ export function parse(data: string): Map<string, string> {
  * @param data - Properties data to convert into text format
  * @returns Converted text which represents the given properties
  */
-export function stringify<T extends object, K extends keyof T>(
-  data: T
-): string {
+export function stringify(data: Map<string, string>): string {
   let result = "";
-  for (const key in data) {
-    if (data.hasOwnProperty(key)) {
-      const element = data[key];
-      result += escape(escapeKey(key)) + " = " + escape("" + element) + "\n";
-    }
-  }
+  data.forEach((value: string, key: string) => {
+    result += escape(escapeKey(key)) + " = " + escape(value) + "\n";
+  });
   return result;
 }
 /**
@@ -48,7 +43,7 @@ export function stringify<T extends object, K extends keyof T>(
  * @param path - Path to the target file to write
  * @returns Promise which is resolved when file is successfully written
  */
-export function write(data: object, path: string): Promise<void> {
+export function write(data: Map<string, string>, path: string): Promise<void> {
   return promises.writeFile(path, stringify(data), {
     encoding: "utf8"
   });
