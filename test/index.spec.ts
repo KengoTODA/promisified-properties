@@ -115,6 +115,10 @@ describe("public API", () => {
     const result = parse("face = \\ud83d\\ude01");
     expect(result.get("face")).to.equal("😁");
   });
+  it("parses URL type value", () => {
+    const result = parse("some_url = https://lol.gov");
+    expect(result.get("some_url")).to.equal("https://lol.gov");
+  });
   it("generates .properties file", done => {
     file()
       .then(fileResult => {
