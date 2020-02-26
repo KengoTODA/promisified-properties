@@ -9,7 +9,7 @@ describe("LogicalLine", () => {
   });
   it("parses a line with key and key terminator", () => {
     const parsed = PropertiesParser.LogicalLine.tryParse("foo=");
-    expect(parsed).to.deep.equal({ key: "foo" });
+    expect(parsed).to.deep.equal({ key: "foo", value: "" });
   });
   it("parses a line with key and value", () => {
     const parsed = PropertiesParser.LogicalLine.tryParse("foo=bar");

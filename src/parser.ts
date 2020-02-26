@@ -70,14 +70,9 @@ export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
     );
     const p2: Parsimmon.Parser<Entry> = Parsimmon.seqObj(
       ["key", r.Key.trim(r.WhiteSpace)],
-      r.KeyTerminator,
       r.WhiteSpace
     );
-    const p3: Parsimmon.Parser<Entry> = Parsimmon.seqObj(
-      ["key", r.Key.trim(r.WhiteSpace)],
-      r.WhiteSpace
-    );
-    return p1.or(p2).or(p3);
+    return p1.or(p2);
   },
   /**
    * Key terminator defined in the spec
@@ -93,9 +88,7 @@ export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
       .map(interpretEscapes);
   },
   Value: (r: Parsimmon.Language) => {
-    return Parsimmon.regexp(
-      /([a-zA-Z0-9_.-]|\\u[a-z0-9]{4}|\\[\\a-zA-Z0-9=:])+/
-    )
+    return Parsimmon.all
       .trim(r.WhiteSpace)
       .map(interpretEscapes);
   }

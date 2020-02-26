@@ -55,6 +55,13 @@ describe("public API", () => {
         expect(result.get("foo=bar")).to.equal("baz");
       });
     });
+    it("parses property without value", async () => {
+      return file().then(async fileResult => {
+        await promises.writeFile(fileResult.path, "foo=");
+        const result = await parseFile(fileResult.path);
+        expect(result.get("foo")).to.equal("");
+      });
+    });
     it("ignores comment", async () => {
       return file().then(async fileResult => {
         await promises.writeFile(
