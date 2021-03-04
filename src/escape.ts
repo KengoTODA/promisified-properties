@@ -5,7 +5,7 @@
  * @returns Escaped string
  */
 export function escape(s: string): string {
-  if (s.length == 0) {
+  if (s.length === 0) {
     return "";
   }
 
