@@ -43,9 +43,9 @@ export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
     return Parsimmon.regexp(/( |\f|\t|\\u0009|\\u0020|\\u000C)*/);
   },
   NaturalLine: (r: Parsimmon.Language) => {
-    return r.CommentLine.map(_ => "")
+    return r.CommentLine.map((_) => "")
       .or(r.BrankLine)
-      .map(_ => "")
+      .map((_) => "")
       .or(Parsimmon.regexp(/.*/));
   },
   /**
@@ -98,18 +98,18 @@ export function parse(s: string): Map<string, string> {
   const logicalLines: string[] = PropertiesParser.NaturalLine.sepBy(
     Parsimmon.newline
   )
-    .map(naturalLines => {
+    .map((naturalLines) => {
       return naturalLines
         .map(appendLineBreak)
         .join("")
         .split("\n")
-        .filter(s => s.length > 0);
+        .filter((s) => s.length > 0);
     })
     .tryParse(s);
   const map: Map<string, string> = new Map<string, string>();
-  logicalLines.forEach(line => {
+  logicalLines.forEach((line) => {
     const entry = PropertiesParser.LogicalLine.tryParse(line);
-    if (!entry) return;
+    if (!entry) { return };
 
     if (entry.value) {
       map.set(entry.key, entry.value.trim());

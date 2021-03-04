@@ -9,7 +9,7 @@ import { parse as parseProperties } from "./parser";
  * @returns Promise which returns parsed properties
  */
 export async function parseFile(path: string): Promise<Map<string, string>> {
-  return promises.readFile(path, { encoding: "utf8" }).then(s => {
+  return promises.readFile(path, { encoding: "utf8" }).then((s) => {
     return parseProperties(s);
   });
 }
