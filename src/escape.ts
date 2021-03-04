@@ -15,9 +15,9 @@ export function escape(s: string): string {
 
   do {
     const code: string = char.value;
-    if (code == "\r") {
+    if (code === "\r") {
       result += "\\r";
-    } else if (code == "\n") {
+    } else if (code === "\n") {
       result += "\\n";
     } else if (code.charCodeAt(0) < 256) {
       result += code;
