@@ -109,7 +109,7 @@ export function parse(s: string): Map<string, string> {
   const map: Map<string, string> = new Map<string, string>();
   logicalLines.forEach((line) => {
     const entry = PropertiesParser.LogicalLine.tryParse(line);
-    if (!entry) { return };
+    if (!entry) { return; }
 
     if (entry.value) {
       map.set(entry.key, entry.value.trim());
