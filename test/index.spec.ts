@@ -1,5 +1,4 @@
-import "mocha";
-import { expect } from "chai";
+import { describe, it, expect } from '@jest/globals';
 import { promises } from "fs";
 import { file } from "tmp-promise";
 import { parse, parseFile, stringify, write } from "../src/index";
@@ -10,56 +9,56 @@ describe("public API", () => {
       return file().then(async fileResult => {
         await promises.writeFile(fileResult.path, "foo=bar");
         const result = await parseFile(fileResult.path);
-        expect(result.get("foo")).to.equal("bar");
+        expect(result.get("foo")).toBe("bar");
       });
     });
     it("uses colon as key terminator", async () => {
       return file().then(async fileResult => {
         await promises.writeFile(fileResult.path, "foo:bar");
         const result = await parseFile(fileResult.path);
-        expect(result.get("foo")).to.equal("bar");
+        expect(result.get("foo")).toBe("bar");
       });
     });
     it("parses multiple natural lines in one logical line", async () => {
       return file().then(async fileResult => {
         await promises.writeFile(fileResult.path, "foo=bar\\\nbaz");
         const result = await parseFile(fileResult.path);
-        expect(result.get("foo")).to.equal("barbaz");
+        expect(result.get("foo")).toBe("barbaz");
       });
     });
     it("ignore spaces at the head of line", async () => {
       return file().then(async fileResult => {
         await promises.writeFile(fileResult.path, "    foo=bar");
         const result = await parseFile(fileResult.path);
-        expect(result.get("foo")).to.equal("bar");
+        expect(result.get("foo")).toBe("bar");
       });
     });
     it("ignore spaces before key terminator", async () => {
       return file().then(async fileResult => {
         await promises.writeFile(fileResult.path, "foo    =bar");
         const result = await parseFile(fileResult.path);
-        expect(result.get("foo")).to.equal("bar");
+        expect(result.get("foo")).toBe("bar");
       });
     });
     it("ignore spaces after key terminator", async () => {
       return file().then(async fileResult => {
         await promises.writeFile(fileResult.path, "foo=    bar");
         const result = await parseFile(fileResult.path);
-        expect(result.get("foo")).to.equal("bar");
+        expect(result.get("foo")).toBe("bar");
       });
     });
     it("escapes key terminator by back-slash", async () => {
       return file().then(async fileResult => {
         await promises.writeFile(fileResult.path, "foo\\=bar=baz");
         const result = await parseFile(fileResult.path);
-        expect(result.get("foo=bar")).to.equal("baz");
+        expect(result.get("foo=bar")).toBe("baz");
       });
     });
     it("parses property without value", async () => {
       return file().then(async fileResult => {
         await promises.writeFile(fileResult.path, "foo=");
         const result = await parseFile(fileResult.path);
-        expect(result.get("foo")).to.equal("");
+        expect(result.get("foo")).toBe("");
       });
     });
     it("ignores comment", async () => {
@@ -69,23 +68,23 @@ describe("public API", () => {
           "# this is comment\r\nfoo=bar"
         );
         const result = await parseFile(fileResult.path);
-        expect(result.get("foo")).to.equal("bar");
-        expect(result).to.have.lengthOf(1);
+        expect(result.get("foo")).toBe("bar");
+        expect(result.size).toBe(1);
       });
     });
     it("set an empty string if there is no non-whitespace char after the key terminator", async () => {
       return file().then(async fileResult => {
         await promises.writeFile(fileResult.path, "foo=\nbar= ");
         const result = await parseFile(fileResult.path);
-        expect(result.get("foo")).to.equal("");
-        expect(result.get("bar")).to.equal("");
+        expect(result.get("foo")).toBe("");
+        expect(result.get("bar")).toBe("");
       });
     });
     it("set an empty string if there is no key terminator", async () => {
       return file().then(async fileResult => {
         await promises.writeFile(fileResult.path, "foo");
         const result = await parseFile(fileResult.path);
-        expect(result.get("foo")).to.equal("");
+        expect(result.get("foo")).toBe("");
       });
     });
   });
@@ -97,34 +96,34 @@ describe("public API", () => {
           ["baz", "42"]
         ])
       );
-      expect(result).to.include("foo = bar");
-      expect(result).to.include("baz = 42");
-      expect(result).to.equal("foo = bar\nbaz = 42\n");
+      expect(result).toContain("foo = bar");
+      expect(result).toContain("baz = 42");
+      expect(result).toBe("foo = bar\nbaz = 42\n");
     });
     it("escapes multibyte chars", () => {
       const result = stringify(new Map([["face", "😁"]]));
-      expect(result).to.include("face = \\ud83d\\ude01");
+      expect(result).toContain("face = \\ud83d\\ude01");
     });
     it("escapes CR", () => {
       const result = stringify(new Map([["text", "foo\rbar"]]));
-      expect(result).to.include("text = foo\\rbar");
+      expect(result).toContain("text = foo\\rbar");
     });
     it("escapes LF", () => {
       const result = stringify(new Map([["text", "foo\nbar"]]));
-      expect(result).to.include("text = foo\\nbar");
+      expect(result).toContain("text = foo\\nbar");
     });
     it("escapes = in key", () => {
       const result = stringify(new Map([["foo=bar", "baz"]]));
-      expect(result).to.include("foo\\=bar = baz");
+      expect(result).toContain("foo\\=bar = baz");
     });
   });
   it("parses escaped multibyte chars", () => {
     const result = parse("face = \\ud83d\\ude01");
-    expect(result.get("face")).to.equal("😁");
+    expect(result.get("face")).toBe("😁");
   });
   it("parses URL type value", () => {
     const result = parse("some_url = https://lol.gov");
-    expect(result.get("some_url")).to.equal("https://lol.gov");
+    expect(result.get("some_url")).toBe("https://lol.gov");
   });
   it("generates .properties file", done => {
     file()
@@ -140,8 +139,8 @@ describe("public API", () => {
             promises
               .readFile(fileResult.path, { encoding: "utf8" })
               .then(lines => {
-                expect(lines).to.include("foo = bar");
-                expect(lines).to.include("baz = 42");
+                expect(lines).toContain("foo = bar");
+                expect(lines).toContain("baz = 42");
                 done();
               })
               .catch(err => done(err));

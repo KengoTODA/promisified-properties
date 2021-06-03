@@ -1,36 +1,35 @@
-import "mocha";
-import { expect } from "chai";
+import { describe, it, expect } from '@jest/globals';
 import { escape, escapeKey } from "../src/escape";
 
 describe("#escape", () => {
   it("does not change empty string", () => {
-    expect(escape("")).to.equal("");
+    expect(escape("")).toBe("");
   });
   it("does not escapes =", () => {
-    expect(escape("foo=bar")).to.equal("foo=bar");
+    expect(escape("foo=bar")).toBe("foo=bar");
   });
   it("escapes emoticon", () => {
-    expect(escape("😁")).to.equal("\\ud83d\\ude01");
+    expect(escape("😁")).toBe("\\ud83d\\ude01");
   });
   it("escapes CR", () => {
-    expect(escape("foo\rbar")).to.equal("foo\\rbar");
+    expect(escape("foo\rbar")).toBe("foo\\rbar");
   });
   it("escapes LF", () => {
-    expect(escape("foo\nbar")).to.equal("foo\\nbar");
+    expect(escape("foo\nbar")).toBe("foo\\nbar");
   });
   it("does not escape single/double quote", () => {
-    expect(escape("'\"")).to.equal("'\"");
+    expect(escape("'\"")).toBe("'\"");
   });
 });
 
 describe("#escapeKey", () => {
   it("escapes =", () => {
-    expect(escapeKey("foo=bar")).to.equal("foo\\=bar");
+    expect(escapeKey("foo=bar")).toBe("foo\\=bar");
   });
   it("escapes :", () => {
-    expect(escapeKey("foo:bar")).to.equal("foo\\:bar");
+    expect(escapeKey("foo:bar")).toBe("foo\\:bar");
   });
   it("escapes multiple key separators", () => {
-    expect(escapeKey("foo:bar=baz:last")).to.equal("foo\\:bar\\=baz\\:last");
+    expect(escapeKey("foo:bar=baz:last")).toBe("foo\\:bar\\=baz\\:last");
   });
 });
