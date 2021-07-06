@@ -1,4 +1,4 @@
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect } from "@jest/globals";
 import { escape, escapeKey } from "../src/escape";
 
 describe("#escape", () => {

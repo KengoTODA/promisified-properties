@@ -8,7 +8,8 @@
     "docs": "typedoc src",
     "prepack": "tsc",
     "semantic-release": "semantic-release",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "husky install"
   },
   "files": [
     "README.md",
@@ -43,7 +44,7 @@
     "@babel/preset-typescript": "^7.13.0",
     "@types/node": "^16.0.0",
     "@types/parsimmon": "^1.10.1",
-    "husky": "^6.0.0",
+    "husky": "^7.0.0",
     "jest": "^27.0.3",
     "prettier": "^2.0.1",
     "pretty-quick": "^3.1.0",
@@ -55,10 +56,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
   }
 }
