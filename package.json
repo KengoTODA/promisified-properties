@@ -7,7 +7,6 @@
   "scripts": {
     "docs": "typedoc src",
     "prepack": "tsc",
-    "semantic-release": "semantic-release",
     "test": "jest",
     "prepare": "husky install"
   },
