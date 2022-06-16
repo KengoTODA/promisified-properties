@@ -38,7 +38,7 @@
     "npm": ">=7.12"
   },
   "devDependencies": {
-    "@types/node": "^17.0.0",
+    "@types/node": "^18.0.0",
     "@types/parsimmon": "^1.10.1",
     "husky": "^8.0.0",
     "jest": "^27.0.3",
