@@ -34,7 +34,7 @@
     "parsimmon": "^1.13.0"
   },
   "engines": {
-    "node": ">=14.16",
+    "node": ">=18",
     "npm": ">=7.12"
   },
   "devDependencies": {
