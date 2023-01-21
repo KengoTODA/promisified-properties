@@ -1,4 +1,4 @@
-import { describe, it, expect } from "@jest/globals";
+import { describe, it, expect } from "vitest";
 import { promises } from "fs";
 import { file } from "tmp-promise";
 import { parse, parseFile, stringify, write } from "../src/index";
@@ -125,28 +125,19 @@ describe("public API", () => {
     const result = parse("some_url = https://lol.gov");
     expect(result.get("some_url")).toBe("https://lol.gov");
   });
-  it("generates .properties file", (done) => {
-    file()
-      .then((fileResult) => {
-        write(
-          new Map([
-            ["foo", "bar"],
-            ["baz", "42"],
-          ]),
-          fileResult.path
-        )
-          .then(() => {
-            promises
-              .readFile(fileResult.path, { encoding: "utf8" })
-              .then((lines) => {
-                expect(lines).toContain("foo = bar");
-                expect(lines).toContain("baz = 42");
-                done();
-              })
-              .catch((err) => done(err));
-          })
-          .catch((err) => done(err));
-      })
-      .catch((err) => done(err));
+  it("generates .properties file", async () => {
+    const path = (await file()).path;
+    await write(
+      new Map([
+        ["foo", "bar"],
+        ["baz", "42"],
+      ]),
+      path
+    );
+
+    const lines = await promises.readFile(path, { encoding: "utf8" });
+
+    expect(lines).toContain("foo = bar");
+    expect(lines).toContain("baz = 42");
   });
 });
