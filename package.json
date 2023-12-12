@@ -47,7 +47,7 @@
     "tmp-promise": "^3.0.2",
     "typedoc": "^0.25.3",
     "typescript": "^5.0.4",
-    "vitest": "^0.34.1"
+    "vitest": "^1.0.4"
   },
   "publishConfig": {
     "access": "public"
