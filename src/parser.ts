@@ -104,7 +104,14 @@ export function parse(s: string): Array<Comment | Entry> {
     .tryParse(s);
   const logicalLineParser: Parsimmon.Parser<Comment | Entry> =
     PropertiesParser.LogicalLine;
-  return logicalLines.map((logicalLine) =>
-    logicalLineParser.tryParse(logicalLine),
-  );
+  return logicalLines.map((logicalLine) => {
+    const result = logicalLineParser.tryParse(logicalLine);
+    if ("value" in result) {
+      return { key: result.key, value: result.value?.trim() };
+    } else if ("key" in result) {
+      return { key: result.key };
+    } else {
+      return result;
+    }
+  });
 }
