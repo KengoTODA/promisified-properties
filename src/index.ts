@@ -34,7 +34,7 @@ export function stringify(data: Array<Comment | Entry>): string {
   let result = "";
   data.forEach((line: Comment | Entry) => {
     if ("text" in line) {
-      result += line.text;
+      result += line.text + "\n";
     } else {
       result +=
         escape(escapeKey(line.key)) + " = " + escape(line.value ?? "") + "\n";
