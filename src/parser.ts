@@ -31,10 +31,6 @@ function interpretEscapes(str: string): string {
     return type;
   });
 }
-type Entry = {
-  key: string;
-  value?: string;
-};
 export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
   /**
    * WhiteSpace defined in the spec
@@ -66,11 +62,11 @@ export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
     const p1: Parsimmon.Parser<Entry> = Parsimmon.seqObj(
       ["key", r.Key.trim(r.WhiteSpace)],
       r.KeyTerminator,
-      ["value", r.Value.trim(r.WhiteSpace)]
+      ["value", r.Value.trim(r.WhiteSpace)],
     );
     const p2: Parsimmon.Parser<Entry> = Parsimmon.seqObj(
       ["key", r.Key.trim(r.WhiteSpace)],
-      r.WhiteSpace
+      r.WhiteSpace,
     );
     return p1.or(p2);
   },
@@ -82,21 +78,19 @@ export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
   },
   Key: (r: Parsimmon.Language) => {
     return Parsimmon.regexp(
-      /([a-zA-Z0-9_.-]|\\u[a-z0-9]{4}|\\[\\a-zA-Z0-9=:])+/
+      /([a-zA-Z0-9_.-]|\\u[a-z0-9]{4}|\\[\\a-zA-Z0-9=:])+/,
     )
       .trim(r.WhiteSpace)
       .map(interpretEscapes);
   },
   Value: (r: Parsimmon.Language) => {
-    return Parsimmon.all
-      .trim(r.WhiteSpace)
-      .map(interpretEscapes);
-  }
+    return Parsimmon.all.trim(r.WhiteSpace).map(interpretEscapes);
+  },
 });
 
 export function parse(s: string): Map<string, string> {
   const logicalLines: string[] = PropertiesParser.NaturalLine.sepBy(
-    Parsimmon.newline
+    Parsimmon.newline,
   )
     .map((naturalLines) => {
       return naturalLines
@@ -109,7 +103,9 @@ export function parse(s: string): Map<string, string> {
   const map: Map<string, string> = new Map<string, string>();
   logicalLines.forEach((line) => {
     const entry = PropertiesParser.LogicalLine.tryParse(line);
-    if (!entry) { return; }
+    if (!entry) {
+      return;
+    }
 
     if (entry.value) {
       map.set(entry.key, entry.value.trim());
