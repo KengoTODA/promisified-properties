@@ -108,8 +108,6 @@ export function parse(s: string): Array<Comment | Entry> {
     const result = logicalLineParser.tryParse(logicalLine);
     if ("value" in result) {
       return { key: result.key, value: result.value?.trim() };
-    } else if ("key" in result) {
-      return { key: result.key };
     } else {
       return result;
     }
