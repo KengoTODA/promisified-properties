@@ -41,13 +41,16 @@
     "@types/node": "^20.1.0",
     "@types/parsimmon": "^1.10.1",
     "husky": "^8.0.0",
+    "lint-staged": "^15.2.0",
     "prettier": "^3.0.0",
-    "pretty-quick": "^3.1.0",
     "semantic-release": "^22.0.10",
     "tmp-promise": "^3.0.2",
     "typedoc": "^0.25.3",
     "typescript": "^5.0.4",
     "vitest": "^1.0.4"
+  },
+  "lint-staged": {
+    "*.ts": "prettier --write"
   },
   "publishConfig": {
     "access": "public"
