@@ -109,23 +109,31 @@ describe("public API", () => {
     });
     it("escapes multibyte chars", () => {
       const result = stringify([{ key: "face", value: "😁" }]);
-      expect(result).toContain("face = \\ud83d\\ude01");
+      expect(result).toBe("face = \\ud83d\\ude01\n");
     });
     it("escapes CR", () => {
       const result = stringify([{ key: "text", value: "foo\rbar" }]);
-      expect(result).toContain("text = foo\\rbar");
+      expect(result).toBe("text = foo\\rbar\n");
     });
     it("escapes LF", () => {
       const result = stringify([{ key: "text", value: "foo\nbar" }]);
-      expect(result).toContain("text = foo\\nbar");
+      expect(result).toBe("text = foo\\nbar\n");
     });
     it("escapes = in key", () => {
       const result = stringify([{ key: "foo=bar", value: "baz" }]);
-      expect(result).toContain("foo\\=bar = baz");
+      expect(result).toBe("foo\\=bar = baz\n");
     });
     it("stringifies comments", () => {
       const result = stringify([{ text: "# comment" }]);
-      expect(result).toContain("# comment");
+      expect(result).toBe("# comment\n");
+    });
+    it("inserts LF after each comments", () => {
+      const result = stringify([
+        { text: "# comment" },
+        { text: "! another" },
+        { key: "foo" },
+      ]);
+      expect(result).toBe("# comment\n! another\nfoo = \n");
     });
   });
   it("parses escaped multibyte chars", () => {
