@@ -104,31 +104,33 @@ describe("Key", () => {
 
 describe("#parse", () => {
   it("parses property", () => {
-    const parsed: Map<string, string> = parse("foo = bar ");
-    expect(parsed.size).toBe(1);
-    expect(parsed.get("foo")).toBe("bar");
+    const parsed = parse("foo = bar ");
+    expect(parsed).toHaveLength(1);
+    expect(parsed[0]).toStrictEqual({ key: "foo", value: "bar" });
   });
   it("parses property with brank line", () => {
-    const parsed: Map<string, string> = parse("\f\t");
-    expect(parsed.size).toBe(0);
+    const parsed = parse("\f\t");
+    expect(parsed).toHaveLength(0);
   });
   it("parses property with needless escape", () => {
-    const parsed: Map<string, string> = parse("\\b=\\z");
-    expect(parsed.get("b")).toBe("z");
+    const parsed = parse("\\b=\\z");
+    expect(parsed).toHaveLength(1);
+    expect(parsed[0]).toStrictEqual({ key: "b", value: "z" });
   });
   it("parses property without value", () => {
-    const parsed: Map<string, string> = parse("foo = ");
-    expect(parsed.size).toBe(1);
-    expect(parsed.get("foo")).toBe("");
+    const parsed = parse("foo = ");
+    expect(parsed).toHaveLength(1);
+    expect(parsed[0]).toStrictEqual({ key: "foo", value: "" });
   });
   it("parses property without key teminator", () => {
-    const parsed: Map<string, string> = parse("foo");
-    expect(parsed.size).toBe(1);
-    expect(parsed.get("foo")).toBe("");
+    const parsed = parse("foo");
+    expect(parsed).toHaveLength(1);
+    expect(parsed[0]).toStrictEqual({ key: "foo" });
   });
   it("parses property with comment", () => {
-    const parsed: Map<string, string> = parse("# comment\nfoo = bar ");
-    expect(parsed.size).toBe(1);
-    expect(parsed.get("foo")).toBe("bar");
+    const parsed = parse("# comment\nfoo = bar ");
+    expect(parsed).toHaveLength(2);
+    expect(parsed[0]).toStrictEqual({ text: "# comment" });
+    expect(parsed[1]).toStrictEqual({ key: "foo", value: "bar" });
   });
 });

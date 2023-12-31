@@ -40,10 +40,7 @@ export const PropertiesParser = Parsimmon.createLanguage({
     return Parsimmon.regexp(/( |\f|\t|\\u0009|\\u0020|\\u000C)*/);
   },
   NaturalLine: (r: Parsimmon.Language) => {
-    return r.CommentLine.map((_) => "")
-      .or(r.BrankLine)
-      .map((_) => "")
-      .or(Parsimmon.regexp(/.*/));
+    return r.BrankLine.map((_) => "").or(Parsimmon.regexp(/.*/));
   },
   /**
    * The natural line that contains only white space characters.
@@ -69,10 +66,7 @@ export const PropertiesParser = Parsimmon.createLanguage({
       ["key", r.Key.trim(r.WhiteSpace)],
       r.WhiteSpace,
     );
-    const p3: Parsimmon.Parser<Comment> = Parsimmon.seqObj([
-      "text",
-      r.CommentLine,
-    ]);
+    const p3: Parsimmon.Parser<Comment> = Parsimmon.seqObj(["text", r.Comment]);
     return p1.or(p2).or(p3);
   },
   /**
@@ -91,6 +85,9 @@ export const PropertiesParser = Parsimmon.createLanguage({
   Value: (r: Parsimmon.Language) => {
     return Parsimmon.all.trim(r.WhiteSpace).map(interpretEscapes);
   },
+  Comment: (r: Parsimmon.Language) => {
+    return Parsimmon.all.map(interpretEscapes);
+  },
 });
 
 export function parse(s: string): Array<Comment | Entry> {
@@ -107,5 +104,7 @@ export function parse(s: string): Array<Comment | Entry> {
     .tryParse(s);
   const logicalLineParser: Parsimmon.Parser<Comment | Entry> =
     PropertiesParser.LogicalLine;
-  return logicalLines.map(logicalLineParser.tryParse);
+  return logicalLines.map((logicalLine) =>
+    logicalLineParser.tryParse(logicalLine),
+  );
 }
