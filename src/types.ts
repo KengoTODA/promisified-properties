@@ -1,7 +1,7 @@
-type Entry = {
+export type Entry = {
   key: string;
   value?: string;
 };
-type Comment = {
+export type Comment = {
   text: string; // including '#', '!' and spaces at beginning
 };

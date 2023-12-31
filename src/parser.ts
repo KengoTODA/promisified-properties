@@ -1,4 +1,5 @@
 import Parsimmon from "parsimmon";
+import { Comment, Entry } from "./types";
 
 /**
  * Append a line-break to the end of line, if the end of line is not escaped by '\'
@@ -31,7 +32,7 @@ function interpretEscapes(str: string): string {
     return type;
   });
 }
-export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
+export const PropertiesParser = Parsimmon.createLanguage({
   /**
    * WhiteSpace defined in the spec
    */
@@ -68,7 +69,11 @@ export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
       ["key", r.Key.trim(r.WhiteSpace)],
       r.WhiteSpace,
     );
-    return p1.or(p2);
+    const p3: Parsimmon.Parser<Comment> = Parsimmon.seqObj([
+      "text",
+      r.CommentLine,
+    ]);
+    return p1.or(p2).or(p3);
   },
   /**
    * Key terminator defined in the spec
@@ -88,7 +93,7 @@ export const PropertiesParser: Parsimmon.Language = Parsimmon.createLanguage({
   },
 });
 
-export function parse(s: string): Map<string, string> {
+export function parse(s: string): Array<Comment | Entry> {
   const logicalLines: string[] = PropertiesParser.NaturalLine.sepBy(
     Parsimmon.newline,
   )
@@ -100,18 +105,7 @@ export function parse(s: string): Map<string, string> {
         .filter((s) => s.length > 0);
     })
     .tryParse(s);
-  const map: Map<string, string> = new Map<string, string>();
-  logicalLines.forEach((line) => {
-    const entry = PropertiesParser.LogicalLine.tryParse(line);
-    if (!entry) {
-      return;
-    }
-
-    if (entry.value) {
-      map.set(entry.key, entry.value.trim());
-    } else {
-      map.set(entry.key, "");
-    }
-  });
-  return map;
+  const logicalLineParser: Parsimmon.Parser<Comment | Entry> =
+    PropertiesParser.LogicalLine;
+  return logicalLines.map(logicalLineParser.tryParse);
 }
