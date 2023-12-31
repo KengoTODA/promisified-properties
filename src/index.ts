@@ -1,6 +1,7 @@
 import { promises } from "fs";
 import { escape, escapeKey } from "./escape";
 import { parse as parseProperties } from "./parser";
+import { Comment, Entry } from "./types";
 
 /**
  * Parse the file pointed by the given path as [the Properties defined by Java](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Properties.html).
@@ -8,7 +9,7 @@ import { parse as parseProperties } from "./parser";
  * @param path - Path to the target file to parse
  * @returns Promise which returns parsed properties
  */
-export async function parseFile(path: string): Promise<Map<string, string>> {
+export async function parseFile(path: string): Promise<Array<Comment | Entry>> {
   return promises.readFile(path, { encoding: "utf8" }).then((s) => {
     return parseProperties(s);
   });
@@ -20,7 +21,7 @@ export async function parseFile(path: string): Promise<Map<string, string>> {
  * @param data - Text to parse
  * @returns Promise which returns parsed properties
  */
-export function parse(data: string): Map<string, string> {
+export function parse(data: string): Array<Comment | Entry> {
   return parseProperties(data);
 }
 
@@ -29,10 +30,15 @@ export function parse(data: string): Map<string, string> {
  * @param data - Properties data to convert into text format
  * @returns Converted text which represents the given properties
  */
-export function stringify(data: Map<string, string>): string {
+export function stringify(data: Array<Comment | Entry>): string {
   let result = "";
-  data.forEach((value: string, key: string) => {
-    result += escape(escapeKey(key)) + " = " + escape(value) + "\n";
+  data.forEach((line: Comment | Entry) => {
+    if ("text" in line) {
+      result += line.text;
+    } else {
+      result +=
+        escape(escapeKey(line.key)) + " = " + escape(line.value ?? "") + "\n";
+    }
   });
   return result;
 }
@@ -43,8 +49,11 @@ export function stringify(data: Map<string, string>): string {
  * @param path - Path to the target file to write
  * @returns Promise which is resolved when file is successfully written
  */
-export function write(data: Map<string, string>, path: string): Promise<void> {
+export function write(
+  data: Array<Comment | Entry>,
+  path: string,
+): Promise<void> {
   return promises.writeFile(path, stringify(data), {
-    encoding: "utf8"
+    encoding: "utf8",
   });
 }
