@@ -8,7 +8,7 @@
     "docs": "typedoc src",
     "prepack": "tsc",
     "test": "vitest",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "files": [
     "README.md",
