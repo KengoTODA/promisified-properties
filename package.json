@@ -46,7 +46,7 @@
     "semantic-release": "^25.0.2",
     "tmp-promise": "^3.0.2",
     "typedoc": "0.27.7",
-    "typescript": "5.5.4",
+    "typescript": "5.9.3",
     "vitest": "^4.0.15"
   },
   "lint-staged": {
