@@ -1,0 +1,13 @@
+minimumReleaseAge: 4320
+pmOnFail: error
+strictDepBuilds: true
+trustPolicy: no-downgrade
+
+# Use the publishing plugin with the updated GitHub Actions HTTP client.
+overrides:
+  semantic-release>@semantic-release/npm: 13.1.3
+
+# The platform binary is supplied by the locked @esbuild optional dependency.
+# Disable the installer and its fallback downloads.
+allowBuilds:
+  esbuild: false
