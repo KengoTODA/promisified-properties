@@ -34,8 +34,7 @@
     "parsimmon": "^1.13.0"
   },
   "engines": {
-    "node": ">=24",
-    "npm": ">=11.5.1"
+    "node": ">=24"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
@@ -54,5 +53,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "packageManager": "pnpm@10.34.5"
 }
