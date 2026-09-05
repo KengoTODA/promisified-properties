@@ -16,25 +16,25 @@ importers:
         version: 1.18.1
     devDependencies:
       '@types/node':
-        specifier: ^24.10.1
+        specifier: 24.10.1
         version: 24.10.1
       '@types/parsimmon':
-        specifier: ^1.10.1
+        specifier: 1.10.9
         version: 1.10.9
       husky:
-        specifier: ^9.0.11
+        specifier: 9.1.7
         version: 9.1.7
       lint-staged:
-        specifier: ^16.2.7
+        specifier: 16.2.7
         version: 16.2.7
       prettier:
-        specifier: ^3.0.0
+        specifier: 3.7.4
         version: 3.7.4
       semantic-release:
-        specifier: ^25.0.2
+        specifier: 25.0.2
         version: 25.0.2(supports-color@7.2.0)(typescript@5.5.4)
       tmp-promise:
-        specifier: ^3.0.2
+        specifier: 3.0.3
         version: 3.0.3
       typedoc:
         specifier: 0.28.15
@@ -43,7 +43,7 @@ importers:
         specifier: 5.5.4
         version: 5.5.4
       vitest:
-        specifier: ^4.0.15
+        specifier: 4.1.0
         version: 4.1.0(@types/node@24.10.1)(vite@7.3.6(@types/node@24.10.1)(yaml@2.8.2))
 
 packages:
