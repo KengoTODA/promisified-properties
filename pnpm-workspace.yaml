@@ -11,3 +11,6 @@ overrides:
 # Disable the installer and its fallback downloads.
 allowBuilds:
   esbuild: false
+minimumReleaseAgeExclude:
+  # Renovate security update: vitest@4.1.11
+  - vitest@4.1.11
