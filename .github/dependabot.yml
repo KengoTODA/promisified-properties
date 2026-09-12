@@ -2,6 +2,8 @@ version: 2
 updates:
   - package-ecosystem: npm
     directory: "/"
+    # Renovate manages version updates; keep Dependabot security updates enabled.
+    open-pull-requests-limit: 0
     schedule:
       interval: daily
     commit-message:
