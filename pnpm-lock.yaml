@@ -28,8 +28,8 @@ importers:
         specifier: 16.2.7
         version: 16.2.7
       prettier:
-        specifier: 3.7.4
-        version: 3.7.4
+        specifier: 3.9.6
+        version: 3.9.6
       semantic-release:
         specifier: 25.0.9
         version: 25.0.9(supports-color@7.2.0)(typescript@5.5.4)
@@ -1398,8 +1398,8 @@ packages:
     resolution: {integrity: sha512-u82N74LFzG8ca+dD8puPnplTXoGH4fTPpVGuIbt36G3qvNlkvfD0lEAZSxaly3KX8TS/L1A1gsCEmvKmBcVbkQ==}
     engines: {node: ^10 || ^12 || >=14}
 
-  prettier@3.7.4:
-    resolution: {integrity: sha512-v6UNi1+3hSlVvv8fSaoUbggEM5VErKmmpGA7Pl3HF8V6uKY7rvClBOJlH6yNwQtfTueNkGVpOv/mtWL9L4bgRA==}
+  prettier@3.9.6:
+    resolution: {integrity: sha512-OpN0zzVdiaiAhxpuuj5efpIS4sY9j7bY6uR5mnj5yPzGkdkjNKSJeUThPb60Jw29QuAZgA4o+/iB49kFiaBX6g==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -3057,7 +3057,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  prettier@3.7.4: {}
+  prettier@3.9.6: {}
 
   pretty-ms@9.3.0:
     dependencies:
