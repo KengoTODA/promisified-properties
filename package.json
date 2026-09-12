@@ -37,7 +37,7 @@
     "node": ">=24"
   },
   "devDependencies": {
-    "@types/node": "24.10.1",
+    "@types/node": "24.13.4",
     "@types/parsimmon": "1.10.9",
     "husky": "9.1.7",
     "lint-staged": "16.2.7",
